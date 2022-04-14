@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2022-04-14T12:39:54Z"
+  name: demo8-1
+  namespace: uptime-demo8-1
+  resourceVersion: "2548413"
+  uid: d9d61e2a-d866-43b3-8a03-78461a180a1d
+spec:
+  clusterIP: 10.43.112.16
+  clusterIPs:
+  - 10.43.112.16
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: demo8-1
+    port: 3001
+    protocol: TCP
+    targetPort: 3001
+  selector:
+    workload.user.cattle.io/workloadselector: apps.deployment-uptime-demo8-1
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo8-1
+  namespace: uptime-demo8-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      workload.user.cattle.io/workloadselector: apps.deployment-uptime-demo8-1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        workload.user.cattle.io/workloadselector: apps.deployment-uptime-demo8-1
+    spec:
+      containers:
+      - image: louislam/uptime-kuma
+        imagePullPolicy: IfNotPresent
+        name: container-0
+        ports:
+        - containerPort: 3001
+          name: demo8-1
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 50m
+            memory: 16Mi
+          limits:
+            cpu: 300m
+            memory: 64Mi
+        volumeMounts:
+        - mountPath: /app/data
+          name: demo8-1
+        - name: tz-config
+          mountPath: /etc/localtime
+      restartPolicy: Always
+      volumes:
+      - name: demo8-1
+        persistentVolumeClaim:
+          claimName: pvc-demo8-1
+      - name: tz-config
+        hostPath:
+           path: /usr/share/zoneinfo/Asia/Bangkok
+           type: File
+---

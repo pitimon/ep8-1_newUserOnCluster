@@ -1,0 +1,63 @@
+Pre-step:
+0. install vsCodes
+https://code.visualstudio.com/Download
++ extension: kubernetes and yaml
+
+1. install kubectl
+https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/
+
+2. kubectl completion Powershell
+
+git clone https://github.com/mziyabo/PSKubectlCompletion.git
+cd .\PSKubectlCompletion\
+Import-Module PSKubectlCompletion
+Set-Alias k -Value kubectl
+Register-KubectlCompletion
+
+3. Github signup and signin
+https://github.com/
+
+######## EP 8-1 Connect to Cluster on windows #######################
+
+https://rke.b.ipv9.xyz
+signin with github account
+
+create Project and namespace
+  open menu
+
+kubeconfig  > $HOME/.kube/config
+
+Lab1:
+Create namespace by kubectl (yaml file)
+**** not used >>>> kubectl create namespace [name] ****
+
+Lab2:
+kubectl create -f lab2-[x]-....
+
+check:
+kubectl get pod -n uptime-demo8-1   
+kubectl get pod -n uptime-demo8-1 -w
+
+kubectl rollout status -n uptime-demo8-1 deployment demo8-1
+
+kubectl describe pod demo8-1-6b5f55679d-cx797 -n uptime-demo8-1
+kubectl describe deployment.apps/demo8-1 -n uptime-demo8-1
+
+=======================================================================
+export yaml file:
+k get pvc pvc-demo8-1 -n uptime-demo8-1 -o yaml > pvclab2.yaml
+k get deployments demo8-1 -n uptime-demo8-1 -o yaml > deploylab2.yaml
+k get svc demo8-1 -n uptime-demo8-1 -o yaml > svclab2.yaml 
+k get ingress demo8-1-virtualhost-ingress -n uptime-demo8-1 -o yaml > ingresslab2.yaml
+
+========
+Ref:
+========
+
+https://developer.ibm.com/tutorials/yaml-basics-and-usage-in-kubernetes/
+https://www.mirantis.com/blog/introduction-to-yaml-creating-a-kubernetes-deployment/#deployment
+
+https://cost.k8s.ipv9.xyz/overview.html
+
+https://hub.docker.com/r/louislam/uptime-kuma
+https://longhorn.io/

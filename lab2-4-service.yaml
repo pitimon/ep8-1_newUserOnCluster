@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo8-1
+  namespace: uptime-demo8-1
+spec:
+  internalTrafficPolicy: Cluster
+  ports:
+  - name: demo8-1
+    port: 3001
+    protocol: TCP
+    targetPort: 3001
+  selector:
+    workload.user.cattle.io/workloadselector: apps.deployment-uptime-demo8-1
+  type: ClusterIP

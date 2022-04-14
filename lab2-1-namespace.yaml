@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: uptime-demo8-1
+  annotations:
+   field.cattle.io/projectId: c-m-7l8v45x2:p-h5tpb
+---

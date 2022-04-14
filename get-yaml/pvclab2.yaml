@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    pv.kubernetes.io/bind-completed: "yes"
+    pv.kubernetes.io/bound-by-controller: "yes"
+    volume.beta.kubernetes.io/storage-provisioner: driver.longhorn.io
+  creationTimestamp: "2022-04-14T12:38:54Z"
+  finalizers:
+  - kubernetes.io/pvc-protection
+  name: pvc-demo8-1
+  namespace: uptime-demo8-1
+  resourceVersion: "2547574"
+  uid: fd3798d5-6156-4be0-8125-f4ea68649ede
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: longhorn
+  volumeMode: Filesystem
+  volumeName: pvc-fd3798d5-6156-4be0-8125-f4ea68649ede
+status:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 10Gi
+  phase: Bound
