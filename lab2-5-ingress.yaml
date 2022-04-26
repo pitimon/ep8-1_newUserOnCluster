@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: itrmutt-uptime.k8s.ipv9.xyz
+  - host: itrmutt-demo8-1.k8s.ipv9.xyz
     http:
       paths:
       - backend:
