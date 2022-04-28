@@ -1,0 +1,103 @@
+#
+# find and replace min to your service name file "lab3-1-create-namespace.yaml and lab3-2-complate.yaml" (step 0)
+# kubectl create -f lab3-1-create-namespace.yml (step 1))
+# kubectl apply -f lab3-2-complete.yml (step 2)
+# 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-min
+  namespace: uptime-min
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: longhorn
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: min
+  namespace: uptime-min
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      workload.user.cattle.io/workloadselector: apps.deployment-uptime-min
+  template:
+    metadata:
+      labels:
+        workload.user.cattle.io/workloadselector: apps.deployment-uptime-min
+    spec:
+      containers:
+      - image: louislam/uptime-kuma
+        imagePullPolicy: Always
+        name: container-0
+        ports:
+        - containerPort: 3001
+          name: min
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 50m
+            memory: 16Mi
+          limits:
+            cpu: 400m
+            memory: 128Mi
+        volumeMounts:
+        - mountPath: /app/data
+          name: min
+        - name: tz-config
+          mountPath: /etc/localtime
+      restartPolicy: Always
+      volumes:
+      - name: min
+        persistentVolumeClaim:
+          claimName: pvc-min
+      - name: tz-config
+        hostPath:
+           path: /usr/share/zoneinfo/Asia/Bangkok
+           type: File
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: min
+  namespace: uptime-min
+spec:
+  internalTrafficPolicy: Cluster
+  ports:
+  - name: min
+    port: 3001
+    protocol: TCP
+    targetPort: 3001
+  selector:
+    workload.user.cattle.io/workloadselector: apps.deployment-uptime-min
+  type: ClusterIP
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-min
+  namespace: uptime-min
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: min.k8s.ipv9.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: min
+            port:
+              number: 3001
+        path: /
+        pathType: Prefix
