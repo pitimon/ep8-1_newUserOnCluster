@@ -1,13 +1,13 @@
 #
-# find and replace min to your service name file "lab3-1-create-namespace.yaml and lab3-2-complate.yaml" (step 0)
+# find and replace "sutiwat" to your service name file "lab3-1-create-namespace.yaml and lab3-2-complate.yaml" (step 0)
 # kubectl create -f lab3-1-create-namespace.yml (step 1))
 # kubectl apply -f lab3-2-complete.yml (step 2)
 # 
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-min
-  namespace: uptime-min
+  name: pvc-sutiwat
+  namespace: uptime-sutiwat
 spec:
   accessModes:
   - ReadWriteMany
@@ -21,17 +21,17 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: min
-  namespace: uptime-min
+  name: sutiwat
+  namespace: uptime-sutiwat
 spec:
   replicas: 1
   selector:
     matchLabels:
-      workload.user.cattle.io/workloadselector: apps.deployment-uptime-min
+      workload.user.cattle.io/workloadselector: apps.deployment-uptime-sutiwat
   template:
     metadata:
       labels:
-        workload.user.cattle.io/workloadselector: apps.deployment-uptime-min
+        workload.user.cattle.io/workloadselector: apps.deployment-uptime-sutiwat
     spec:
       containers:
       - image: louislam/uptime-kuma
@@ -39,7 +39,7 @@ spec:
         name: container-0
         ports:
         - containerPort: 3001
-          name: min
+          name: sutiwat
           protocol: TCP
         resources:
           requests:
@@ -50,14 +50,14 @@ spec:
             memory: 128Mi
         volumeMounts:
         - mountPath: /app/data
-          name: min
+          name: sutiwat
         - name: tz-config
           mountPath: /etc/localtime
       restartPolicy: Always
       volumes:
-      - name: min
+      - name: sutiwat
         persistentVolumeClaim:
-          claimName: pvc-min
+          claimName: pvc-sutiwat
       - name: tz-config
         hostPath:
            path: /usr/share/zoneinfo/Asia/Bangkok
@@ -68,17 +68,17 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: min
-  namespace: uptime-min
+  name: sutiwat
+  namespace: uptime-sutiwat
 spec:
   internalTrafficPolicy: Cluster
   ports:
-  - name: min
+  - name: sutiwat
     port: 3001
     protocol: TCP
     targetPort: 3001
   selector:
-    workload.user.cattle.io/workloadselector: apps.deployment-uptime-min
+    workload.user.cattle.io/workloadselector: apps.deployment-uptime-sutiwat
   type: ClusterIP
 
 ---
@@ -86,17 +86,17 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-min
-  namespace: uptime-min
+  name: ingress-sutiwat
+  namespace: uptime-sutiwat
 spec:
   ingressClassName: nginx
   rules:
-  - host: min.k8s.ipv9.xyz
+  - host: sutiwat.k8s.ipv9.xyz
     http:
       paths:
       - backend:
           service:
-            name: min
+            name: sutiwat
             port:
               number: 3001
         path: /
